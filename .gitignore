@@ -1,0 +1,13 @@
+# Python binaries and environments
+python-embed/
+.venv/
+venv/
+*.pyc
+__pycache__/
+db.sqlite3-journal
+
+# Media and temp archives
+yolov8n.pt.zip
+*.xlsx
+*.jpeg
+*.jpg

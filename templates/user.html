@@ -1,0 +1,703 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Driver Dashboard - Smart Car Parking System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        /* Import modern premium font */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg-main: #0b0d12;
+            --bg-card: rgba(18, 22, 31, 0.75);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --accent-primary: #5c64ec;
+            --accent-hover: #4b52cc;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main) !important;
+            color: var(--text-secondary) !important;
+            font-family: var(--font-main) !important;
+            overflow-x: hidden;
+        }
+
+        /* Override Poppins/Roboto fonts everywhere */
+        h1, h2, h3, h4, h5, h6, .navbar-brand, .nav-link, .btn, body {
+            font-family: var(--font-main) !important;
+        }
+
+        /* Header/Topbar styling */
+        .container-fluid.bg-primary {
+            background-color: #080a0e !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar {
+            background-color: rgba(11, 13, 18, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-light .navbar-nav .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .navbar-light .navbar-nav .nav-link:hover, 
+        .navbar-light .navbar-nav .nav-link.active {
+            color: var(--accent-primary) !important;
+        }
+
+        /* Styled Carousel */
+        .carousel-item {
+            height: 60vh;
+            min-height: 450px;
+            background: #000000;
+            overflow: hidden;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.75;
+            filter: brightness(0.8) contrast(1.1);
+        }
+        .carousel-caption {
+            background: linear-gradient(to top, rgba(11, 13, 18, 0.9) 10%, rgba(11, 13, 18, 0.4) 60%, transparent 100%);
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            padding: 100px 20px 60px 20px !important;
+        }
+        .carousel-caption h1 {
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* Styled Buttons */
+        .btn-primary {
+            background-color: var(--accent-primary) !important;
+            border-color: var(--accent-primary) !important;
+            font-weight: 600;
+            border-radius: 8px !important;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover) !important;
+            border-color: var(--accent-hover) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(92, 100, 236, 0.4);
+        }
+
+        /* Dropdown Menus */
+        .dropdown-menu {
+            background-color: var(--bg-card) !important;
+            border: 1px solid var(--border-color) !important;
+            backdrop-filter: blur(15px);
+        }
+        .dropdown-item {
+            color: var(--text-secondary) !important;
+            transition: all 0.3s;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: var(--accent-primary) !important;
+        }
+
+        /* Malls/Service Cards Grid section */
+        .service {
+            background-color: var(--bg-main) !important;
+            position: relative;
+        }
+        .service h1 {
+            color: var(--text-primary);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .service-item {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px 20px;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255,255,255,0.06), transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .service-item:hover {
+            transform: translateY(-8px);
+            border-color: rgba(92, 100, 236, 0.3);
+            box-shadow: 0 20px 40px rgba(92, 100, 236, 0.15);
+        }
+        .service-inner {
+            padding-bottom: 0 !important;
+        }
+        .service-item h5 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .service-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .btn-xl-square.bg-primary {
+            background-color: var(--accent-primary) !important;
+            box-shadow: 0 4px 15px rgba(92, 100, 236, 0.4);
+        }
+        .service-item .btn-light {
+            background: transparent !important;
+            border: 1px solid var(--border-color);
+            color: var(--accent-primary) !important;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .service-item:hover .btn-light {
+            background: var(--accent-primary) !important;
+            color: #ffffff !important;
+            border-color: var(--accent-primary);
+        }
+
+        /* Search bar styling */
+        .search-box {
+            position: relative;
+        }
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+            border-radius: 12px !important;
+            padding: 14px 20px 14px 45px !important;
+            transition: all 0.3s;
+        }
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: var(--accent-primary) !important;
+            box-shadow: 0 0 15px rgba(92, 100, 236, 0.25) !important;
+        }
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            z-index: 10;
+        }
+
+        /* Footer styling */
+        .footer {
+            background-color: #080a0e !important;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer h5 {
+            color: var(--text-primary) !important;
+            font-weight: 700;
+        }
+        .footer p, .footer a {
+            color: var(--text-secondary) !important;
+        }
+        .footer a:hover {
+            color: var(--accent-primary) !important;
+        }
+        .copyright {
+            background-color: #050609 !important;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary) !important;
+        }
+        .copyright a {
+            color: var(--accent-primary) !important;
+        }
+
+        /* Live Slot Card Styling (Dark Mode, flat badges, no blink) */
+        .slot-card {
+            background: rgba(18, 22, 31, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .slot-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(92, 100, 236, 0.3);
+        }
+        .slot-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+        .slot-vacant {
+            background: rgba(46, 125, 50, 0.08) !important;
+            border: 1px solid rgba(46, 125, 50, 0.25) !important;
+            color: #81c784 !important;
+        }
+        .slot-vacant .slot-icon {
+            color: #81c784 !important;
+        }
+        .slot-occupied {
+            background: rgba(198, 40, 40, 0.08) !important;
+            border: 1px solid rgba(198, 40, 40, 0.25) !important;
+            color: #e57373 !important;
+        }
+        .slot-occupied .slot-icon {
+            color: #e57373 !important;
+        }
+
+        /* Complaints and Feedback Section */
+        .complaint-form-box {
+            background: rgba(18, 22, 31, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .feedback-item {
+            background: rgba(18, 22, 31, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        .feedback-item:hover {
+            border-color: rgba(92, 100, 236, 0.2);
+        }
+        .reply-box {
+            background: rgba(92, 100, 236, 0.05);
+            border: 1px solid rgba(92, 100, 236, 0.15);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+        .awaiting-box {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #fde047;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .carousel-item {
+                height: 45vh;
+                min-height: 300px;
+            }
+            .carousel-caption h1 {
+                font-size: 2.5rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-primary text-white d-none d-lg-flex wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-3">
+            <div class="d-flex align-items-center">
+                <a href="/user/">
+                    <h2 class="text-white fw-bold m-0">SCPS</h2>
+                </a>
+                <div class="ms-auto d-flex align-items-center">
+                    <small class="ms-4"><i class="fa fa-map-marker-alt me-3"></i>Kondotty, Malappuram, Kerala, India</small>
+                    <small class="ms-4"><i class="fa fa-envelope me-3"></i>shamil4884@gmail.com</small>
+                    <small class="ms-4"><i class="fa fa-phone-alt me-3"></i>+91 8547916013</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-white sticky-top wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light p-lg-0">
+                <a href="/" class="navbar-brand d-lg-none">
+                    <h1 class="fw-bold m-0">smart car parking system</h1>
+                </a>
+                <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav">
+                        <a href="/" class="nav-item nav-link">Home</a>
+                        <a href="/user/" class="nav-item nav-link active">User Dashboard</a>
+                        <a href="#live-slots" class="nav-item nav-link">Live Slots</a>
+                        <a href="#malls-section" class="nav-item nav-link">Supported Malls</a>
+                        <a href="#complaints-section" class="nav-item nav-link">Feedback & Complaints</a>
+                    </div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <span class="me-3 text-light">Driver Portal | <strong>{{ user.username }}</strong></span>
+                        <a href="/logout/" class="btn btn-outline-danger px-4">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </a>
+                    </div>
+                </div>
+
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-6 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#header-carousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1">
+                    <img class="img-fluid" src="{% static 'images/car1.png' %}" alt="Image">
+                </button>
+                <button type="button" data-bs-target="#header-carousel" data-bs-slide-to="1" aria-label="Slide 2">
+                    <img class="img-fluid" src="{% static 'images/car2.png' %}" alt="Image">
+                </button>
+                <button type="button" data-bs-target="#header-carousel" data-bs-slide-to="2" aria-label="Slide 3">
+                    <img class="img-fluid" src="{% static 'images/car3.png' %}" alt="Image">
+                </button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" src="{% static 'images/car1.png' %}" alt="Image">
+                    <div class="carousel-caption">
+                        <h1 class="display-1 text-uppercase text-white mb-4 animated zoomIn">Parking Solution
+                        </h1>
+                        <a href="#live-slots" class="btn btn-primary py-3 px-4">Check Live Slots</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="w-100" src="{% static 'images/car2.png' %}" alt="Image">
+                    <div class="carousel-caption">
+                        <h1 class="display-1 text-uppercase text-white mb-4 animated zoomIn">Best Malls
+                        </h1>
+                        <a href="#malls-section" class="btn btn-primary py-3 px-4">Browse Malls</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="w-100" src="{% static 'images/car3.png' %}" alt="Image">
+                    <div class="carousel-caption">
+                        <h1 class="display-1 text-uppercase text-white mb-4 animated zoomIn">Easy Navigation
+                        </h1>
+                        <a href="#complaints-section" class="btn btn-primary py-3 px-4">Submit Feedback</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- Live Slots Section Start -->
+    <div id="live-slots" class="container pt-5 pb-5">
+        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <h1 class="display-6 text-uppercase mb-4 text-white">Live Parking Slots Status</h1>
+            <p class="text-secondary">Real-time slot availability for Lulu Mall (tracked by automated gate cameras and distance sensors).</p>
+        </div>
+        
+        <div class="row g-4 justify-content-center text-center mt-3">
+            <!-- Slot A -->
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="slot-card {% if slots.a == '0' or slots.a == 'empty' or slots.a == 'L' %}slot-vacant{% else %}slot-occupied{% endif %}">
+                    <div class="slot-icon"><i class="fa fa-car"></i></div>
+                    <h4>Slot A</h4>
+                    <span>
+                        {% if slots.a == '0' or slots.a == 'empty' or slots.a == 'L' %}Vacant{% else %}Occupied{% endif %}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Slot B -->
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="slot-card {% if slots.b == '0' or slots.b == 'empty' or slots.b == 'L' %}slot-vacant{% else %}slot-occupied{% endif %}">
+                    <div class="slot-icon"><i class="fa fa-car"></i></div>
+                    <h4>Slot B</h4>
+                    <span>
+                        {% if slots.b == '0' or slots.b == 'empty' or slots.b == 'L' %}Vacant{% else %}Occupied{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Slot C -->
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.25s">
+                <div class="slot-card {% if slots.c == '0' or slots.c == 'empty' or slots.c == 'L' %}slot-vacant{% else %}slot-occupied{% endif %}">
+                    <div class="slot-icon"><i class="fa fa-car"></i></div>
+                    <h4>Slot C</h4>
+                    <span>
+                        {% if slots.c == '0' or slots.c == 'empty' or slots.c == 'L' %}Vacant{% else %}Occupied{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Slot D -->
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="slot-card {% if slots.d == '0' or slots.d == 'empty' or slots.d == 'L' %}slot-vacant{% else %}slot-occupied{% endif %}">
+                    <div class="slot-icon"><i class="fa fa-car"></i></div>
+                    <h4>Slot D</h4>
+                    <span>
+                        {% if slots.d == '0' or slots.d == 'empty' or slots.d == 'L' %}Vacant{% else %}Occupied{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Live Slots Section End -->
+
+
+
+
+<!-- Service Start -->
+    <div id="malls-section" class="container-fluid service pt-6 pb-6">
+        <div class="container">
+            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+                <h1 id="go" class="display-6 text-uppercase mb-5 ">Supported Malls</h1>
+            </div>
+			<!-- Search Bar -->
+<div class="row justify-content-center mb-5 wow fadeInUp" data-wow-delay="0.15s">
+    <div class="col-lg-6 col-md-8">
+        <div class="search-box">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="form-control search-input"
+                placeholder="Search malls by name or location...">
+        </div>
+    </div>
+</div>
+
+            <div class="row g-4">
+                {% for mall in malls %}
+                <div class="col-lg-3 col-md-6 wow fadeInUp service-item-wrapper" data-wow-delay="0.1s">
+                    <div class="service-item">
+                        <div class="service-inner pb-5">
+                            <div class="d-flex justify-content-center" style="margin-top: -30px;">
+                                <div class="btn-xl-square bg-primary text-white rounded-circle">
+                                    <i class="fa fa-building fa-2x"></i>
+                                </div>
+                            </div>
+                            <div class="service-text px-4 pt-4">
+                                <h5 class="text-uppercase">{{ mall.mall_name }}</h5>
+                                <p class="mb-2 text-secondary"><strong>Location:</strong> {{ mall.location }}, {{ mall.city }}</p>
+                                <p class="mb-0 text-secondary"><strong>Contact:</strong> {{ mall.contact_number }}</p>
+                            </div>
+                            <a class="btn btn-light px-3 mt-3" href="#live-slots">Check Availability<i
+                                    class="bi bi-chevron-double-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center text-muted">
+                    <p>No malls registered in the database yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+    <!-- User Complaints and Feedback Section Start -->
+    <div id="complaints-section" class="container pt-6 pb-6 mb-5">
+        <div class="row g-5">
+            <!-- Left: File a complaint -->
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <h3 class="text-uppercase mb-4 text-white"><i class="bi bi-chat-dots text-primary me-2"></i>Submit Feedback / File Complaint</h3>
+                
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="background: rgba(46, 125, 50, 0.1); border: 1px solid rgba(46, 125, 50, 0.2); color: #81c784;">
+                            {{ msg }}
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form action="/post-complaint/" method="post" class="complaint-form-box">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="mall_id" class="form-label text-secondary">Select Mall</label>
+                        <select name="mall_id" id="mall_id" class="form-select bg-dark text-white border-secondary" style="background-color: rgba(255, 255, 255, 0.04) !important; border: 1px solid var(--border-color) !important; border-radius: 8px; padding: 10px 14px;">
+                            <option value="" style="background: #121622;">System Wide / General</option>
+                            {% for mall in malls %}
+                                <option value="{{ mall.id }}" style="background: #121622;">{{ mall.mall_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label text-secondary">Subject</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="title" name="title" placeholder="e.g. Issue with parking Slot B" required style="background-color: rgba(255, 255, 255, 0.04) !important; border: 1px solid var(--border-color) !important; border-radius: 8px; padding: 10px 14px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label text-secondary">Detail Message</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="message" name="message" rows="4" placeholder="Describe the issue or suggestions..." required style="background-color: rgba(255, 255, 255, 0.04) !important; border: 1px solid var(--border-color) !important; border-radius: 8px; padding: 10px 14px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3">Submit Message</button>
+                </form>
+            </div>
+
+            <!-- Right: List submitted complaints -->
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.3s">
+                <h3 class="text-uppercase mb-4 text-white"><i class="bi bi-mailbox2 text-primary me-2"></i>My Submitted Feedbacks</h3>
+                <div style="max-height: 440px; overflow-y: auto; padding-right: 10px;">
+                    {% for comp in complaints %}
+                        <div class="feedback-item">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0 text-white" style="font-weight: 600;">{{ comp.title }}</h5>
+                                <span class="badge bg-secondary" style="font-size: 0.75rem; background-color: rgba(255,255,255,0.1) !important;">{{ comp.created_at|date:"d M Y H:i" }}</span>
+                            </div>
+                            <p class="mb-2 text-secondary" style="font-size: 0.95rem;">{{ comp.text }}</p>
+                            
+                            {% if comp.mall %}
+                                <div class="mb-2" style="font-size: 0.85rem; color: var(--text-secondary);">
+                                    <i class="bi bi-building me-1"></i><strong>Mall:</strong> {{ comp.mall.mall_name }}
+                                </div>
+                            {% endif %}
+
+                            {% if comp.reply %}
+                                <div class="reply-box">
+                                    <i class="bi bi-chat-left-text-fill me-2 text-primary"></i><strong>Reply:</strong> {{ comp.reply }}
+                                </div>
+                            {% else %}
+                                <div class="awaiting-box">
+                                    <i class="bi bi-hourglass-split me-2 text-warning"></i>Awaiting response from representative
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="text-center p-5 rounded border border-secondary" style="background: rgba(18, 22, 31, 0.4); border-style: dashed !important; border-color: var(--border-color) !important;">
+                            <i class="bi bi-inbox fa-3x text-muted mb-3 d-block"></i>
+                            <p class="text-secondary mb-0">You have not submitted any complaints yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- User Complaints and Feedback Section End -->
+
+
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark footer py-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-uppercase text-light mb-4">Our Head Office</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>Kondotty, Malappuram, Kerala, India</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+91 8547916013</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>shamil4884@gmail.com</p>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-uppercase text-light mb-4">Quick Links</h5>
+                    <a class="btn btn-link" href="#">About Project</a>
+                    <a class="btn btn-link" href="user.html">User Portal</a>
+                    <a class="btn btn-link" href="admin.html">Admin Dashboard</a>
+                    <a class="btn btn-link" href="register.html">Create Account</a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-uppercase text-light mb-4">Operating Hours</h5>
+                    <p class="text-uppercase mb-0">Online Services</p>
+                    <p>24 / 7 Availability</p>
+                    <p class="text-uppercase mb-0">On-Site Support</p>
+                    <p>09:00 am - 10:00 pm Daily</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Copyright Start -->
+    <div class="container-fluid text-body copyright py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    &copy; <a class="fw-semi-bold" href="#">SCPS</a>, All Right Reserved.
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    Developed by SCPS Team
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Spotlight glow effect for service cards
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('mousemove', e => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                item.style.setProperty('--x', `${x}px`);
+                item.style.setProperty('--y', `${y}px`);
+            });
+        });
+
+        // Client-side search for malls
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('.service-item-wrapper').forEach(item => {
+                    const title = item.querySelector('h5').textContent.toLowerCase();
+                    const text = item.querySelector('.service-text').textContent.toLowerCase();
+                    if (title.includes(query) || text.includes(query)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
