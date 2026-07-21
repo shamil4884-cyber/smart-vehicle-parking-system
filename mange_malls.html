@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Admin - Manage Malls</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    
+    <style>
+        /* Import Outfit font */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg-main: #0b0d12;
+            --bg-card: rgba(18, 22, 31, 0.75);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --accent-primary: #5c64ec;
+            --accent-hover: #4b52cc;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main) !important;
+            color: var(--text-secondary) !important;
+            font-family: var(--font-main) !important;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h2, h3 {
+            color: var(--text-primary);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .table {
+            color: var(--text-secondary) !important;
+            margin-bottom: 0 !important;
+        }
+
+        th {
+            background-color: rgba(92, 100, 236, 0.1) !important;
+            color: var(--text-primary) !important;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color) !important;
+            padding: 12px !important;
+            text-align: center;
+        }
+
+        td {
+            padding: 14px 12px !important;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--text-secondary) !important;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 16px;
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-primary) !important;
+            background: rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 0 12px rgba(92, 100, 236, 0.25) !important;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-primary) !important;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-hover) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(92, 100, 236, 0.3);
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+            max-width: 300px;
+            margin-left: auto;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 12px rgba(92, 100, 236, 0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Back Button Style */
+        .back-btn {
+            background-color: transparent;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+            padding: 8px 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-primary);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(92, 100, 236, 0.2);
+        }
+        
+        .mall-row {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <!-- Back Button -->
+    <a href="/admin/" class="back-btn">⬅ Back</a>
+
+    <h2>Manage Malls</h2>
+
+    <div class="search-box">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Search malls...">
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Mall ID</th>
+                    <th>Mall Name</th>
+                    <th>Location / Area</th>
+                    <th>City</th>
+                    <th>Contact Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mall in malls %}
+                <tr class="mall-row">
+                    <td><strong class="text-white">{{ mall.id }}</strong></td>
+                    <td class="text-white font-weight-bold">{{ mall.mall_name }}</td>
+                    <td>{{ mall.location }}</td>
+                    <td>{{ mall.city }}</td>
+                    <td>{{ mall.contact_number }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-4 text-center text-muted">No malls found. Add one below.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
+
+    <h3>Add New Mall</h3>
+    <form method="post" action="/mange-malls/">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="mall_name">Mall Name</label>
+            <input type="text" class="form-control" name="mall_name" id="mall_name" placeholder="e.g. Lulu Mall" required autocomplete="off">
+        </div>
+        <div class="form-row row">
+            <div class="form-group col-md-6">
+                <label for="location">Location / Area</label>
+                <input type="text" class="form-control" name="location" id="location" placeholder="e.g. Kozhikode" required autocomplete="off">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="city">City</label>
+                <input type="text" class="form-control" name="city" id="city" placeholder="e.g. Calicut" required autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contact_number">Contact Number</label>
+            <input type="text" class="form-control" name="contact_number" id="contact_number" placeholder="e.g. 885985" required autocomplete="off">
+        </div>
+        <button type="submit" class="btn-submit mt-3">Add Mall</button>
+    </form>
+</div>
+
+<script>
+    // Client-side search filtering
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            document.querySelectorAll('.mall-row').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
