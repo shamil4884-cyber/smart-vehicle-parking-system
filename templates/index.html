@@ -399,6 +399,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <!-- Smart Parking AI Assistant -->
+<button id="scps-chat-toggle" class="scps-chat-toggle" type="button" aria-expanded="false" aria-controls="scps-chat-panel">✦ Chat with AI</button>
+<section id="scps-chat-panel" class="scps-chat-panel" aria-label="Smart Parking Assistant" hidden>
+ <header class="scps-chat-header"><strong>✦ Smart Parking Assistant</strong><button id="scps-chat-close" class="scps-chat-close" type="button" aria-label="Close chat">×</button></header>
+ <div id="scps-chat-log" class="scps-chat-log" role="log" aria-live="polite"></div>
+ <form id="scps-chat-form" class="scps-chat-form"><input id="scps-chat-input" class="scps-chat-input" placeholder="Ask about parking…" maxlength="1500" aria-label="Your message" required><button type="submit">Send</button></form>
+</section>
+<script src="/static/js/scps-chat.js" defer></script>
 </body>
 
 </html>
