@@ -35,5 +35,5 @@ urlpatterns = [
     path('post-complaint/', views.post_complaint, name='post_complaint'),
     path('forward-complaint/<int:complaint_id>/', views.forward_complaint, name='forward_complaint'),
     path('post-reply/<int:complaint_id>/', views.post_reply, name='post_reply'),
-    path('chatbot/', views.chatbot_response, name='chatbot'),
+    path('api/chatbot/', views.chatbot_response, name='chatbot'),
 ]
