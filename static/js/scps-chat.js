@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.value = ''; bubble(message, 'user'); const waiting = bubble('Thinking…', 'ai');
     const btn = form.querySelector('button'); btn.disabled = true;
     try {
-      const csrf = form.querySelector('[name=csrfmiddlewaretoken]')?.value || ''; 
+    const csrf = document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1] || form.querySelector('[name=csrfmiddlewaretoken]')?.value || ''; 
       const data = new URLSearchParams({message});
       const res = await fetch('/api/chatbot/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded','X-CSRFToken':csrf},body:data,credentials:'same-origin'});
       const json = await res.json(); waiting.textContent = json.reply || json.error || 'Sorry, something went wrong.';
