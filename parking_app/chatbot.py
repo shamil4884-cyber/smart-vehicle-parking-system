@@ -19,7 +19,7 @@ def chatbot_response(request):
         from google import genai
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model=os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite"),
+           model=os.getenv("GEMINI_MODEL", "gemini-3.8-flash"),
             contents=message,
             config={"system_instruction": (
                 "You are the Smart Parking Assistant for a Smart Car Parking System website. "
