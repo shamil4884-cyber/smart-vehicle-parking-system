@@ -2,9 +2,10 @@ import logging
 import os
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 logger = logging.getLogger(__name__)
-
+@ensure_csrf_cookie
 @require_POST
 def chatbot_response(request):
     message = request.POST.get("message", "").strip()

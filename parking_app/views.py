@@ -1,10 +1,11 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import UserProfile, Mall, Complaint, Slot, Vehicle
-
+@ensure_csrf_cookie
 def home_view(request):
     # If logged in, redirect to respective dashboard
     if request.user.is_authenticated:
