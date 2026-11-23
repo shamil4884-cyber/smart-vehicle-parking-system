@@ -243,11 +243,14 @@ def post_reply(request, complaint_id):
         
     return redirect('mall_dashboard')
 
+
 import json
 import os
+import logging
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
+logger = logging.getLogger(__name__)
 
 @require_POST
 def chatbot_response(request):
@@ -258,23 +261,23 @@ def chatbot_response(request):
         if not message:
             return JsonResponse({"response": "Please enter a message."})
 
-        from google import genai
-
-        api_key = os.environ.get("GEMINI_API_KEY")
+        api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             return JsonResponse(
                 {"response": "AI service is not configured."},
                 status=503
             )
 
+        from google import genai
         client = genai.Client(api_key=api_key)
+
         result = client.models.generate_content(
-            model="gemini-3.8-flash",
+            model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             contents=(
                 "You are the Smart Parking System website assistant. "
                 "Help users with parking, registration, login, "
                 "slot availability and website navigation. "
-              model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+                "Do not invent live parking availability.\n\n"
                 f"User: {message}"
             )
         )
@@ -284,7 +287,7 @@ def chatbot_response(request):
         })
 
     except Exception:
-    logger.exception("Gemini chatbot failed")
+        logger.exception("Gemini chatbot failed")
         return JsonResponse(
             {"response": "AI service is temporarily unavailable."},
             status=503
