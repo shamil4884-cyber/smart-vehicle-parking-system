@@ -274,7 +274,7 @@ def chatbot_response(request):
                 "You are the Smart Parking System website assistant. "
                 "Help users with parking, registration, login, "
                 "slot availability and website navigation. "
-                "Do not invent live parking availability.\n\n"
+              model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
                 f"User: {message}"
             )
         )
@@ -284,6 +284,7 @@ def chatbot_response(request):
         })
 
     except Exception:
+    logger.exception("Gemini chatbot failed")
         return JsonResponse(
             {"response": "AI service is temporarily unavailable."},
             status=503
