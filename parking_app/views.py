@@ -255,8 +255,11 @@ logger = logging.getLogger(__name__)
 @require_POST
 def chatbot_response(request):
     try:
-        data = json.loads(request.body)
-        message = str(data.get("message", "")).strip()
+        if request.content_type == "application/json":
+            data = json.loads(request.body)
+            message = str(data.get("message", "")).strip()
+        else:
+            message = request.POST.get("message", "").strip()
 
         if not message:
             return JsonResponse({"response": "Please enter a message."})
