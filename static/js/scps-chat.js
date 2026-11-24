@@ -70,11 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const json = await res.json();
 
-      waiting.textContent =
+     waiting.textContent = (
         json.response ||
         json.reply ||
         json.error ||
-        'Sorry, something went wrong.';
+        'Sorry, something went wrong.'
+      ).replace(/\*\*/g, '');
 
     } catch (err) {
       waiting.textContent =
