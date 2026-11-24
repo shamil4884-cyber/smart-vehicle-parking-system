@@ -265,6 +265,7 @@ def chatbot_response(request):
             return JsonResponse({"response": "Please enter a message."})
 
         api_key = os.getenv("GEMINI_API_KEY")
+
         if not api_key:
             return JsonResponse(
                 {"response": "AI service is not configured."},
@@ -272,26 +273,50 @@ def chatbot_response(request):
             )
 
         from google import genai
+        from google.genai import errors
+
         client = genai.Client(api_key=api_key)
 
-        result = client.models.generate_content(
-            model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
-            contents=(
-                "You are the Smart Parking System website assistant. "
-                "Help users with parking, registration, login, "
-                "slot availability and website navigation. "
-                "Do not invent live parking availability.\n\n"
-                f"User: {message}"
-            )
+        models = [
+            os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite"),
+            "gemini-3.5-flash-lite",
+            "gemini-3.8-flash"
+        ]
+
+        prompt = (
+            "You are the Smart Parking System website assistant. "
+            "Help users with parking, registration, login, "
+            "slot availability and website navigation. "
+            "Do not invent live parking availability.\n\n"
+            f"User: {message}"
         )
 
+        for model in dict.fromkeys(models):
+            try:
+                result = client.models.generate_content(
+                    model=model,
+                    contents=prompt
+                )
+
+                if result.text:
+                    return JsonResponse({
+                        "response": result.text
+                    })
+
+            except errors.APIError as e:
+                logger.warning("Gemini model %s failed: %s", model, e)
+
+                if e.code not in (404, 429, 500, 502, 503, 504):
+                    raise
+
+                continue
+
         return JsonResponse({
-            "response": result.text or "No response generated."
-        })
+            "response": "AI is currently busy. Please try again shortly."
+        }, status=503)
 
     except Exception:
         logger.exception("Gemini chatbot failed")
-        return JsonResponse(
-            {"response": "AI service is temporarily unavailable."},
-            status=503
-        )
+        return JsonResponse({
+            "response": "AI service is temporarily unavailable."
+        }, status=503)
