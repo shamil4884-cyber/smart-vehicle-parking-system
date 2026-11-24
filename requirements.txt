@@ -3,3 +3,4 @@ gunicorn
 whitenoise
 
 google-genai>=1.0
+groq

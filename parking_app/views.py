@@ -311,6 +311,39 @@ def chatbot_response(request):
 
                 continue
 
+                groq_key = os.getenv("GROQ_API_KEY")
+
+        if groq_key:
+            try:
+                from groq import Groq
+
+                groq_client = Groq(
+                    api_key=groq_key,
+                    timeout=15.0,
+                    max_retries=1
+                )
+
+                completion = groq_client.chat.completions.create(
+                    model=os.getenv(
+                        "GROQ_MODEL",
+                        "llama-3.3-70b-versatile"
+                    ),
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=500
+                )
+
+                reply = completion.choices[0].message.content
+
+                if reply:
+                    return JsonResponse({
+                        "response": reply
+                    })
+
+            except Exception:
+                logger.exception("Groq fallback failed")
+
         return JsonResponse({
             "response": "AI is currently busy. Please try again shortly."
         }, status=503)
